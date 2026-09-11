@@ -93,27 +93,6 @@ export function generateCaptchaImage(
     }
   }
 }
-
-/**
- * 生成数学运算验证码
- * @returns 验证码结果
- */
-export function generateMathCaptcha(): CaptchaResult {
-  const captcha = svgCaptcha.createMathExpr({
-    noise: 2,
-    color: true,
-    background: '#f0f0f0',
-    width: 120,
-    height: 40,
-    fontSize: 50,
-  })
-
-  return {
-    text: captcha.text,
-    data: captcha.data,
-  }
-}
-
 /**
  * 验证验证码文本
  * @param userInput 用户输入
