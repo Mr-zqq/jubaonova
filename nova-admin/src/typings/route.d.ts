@@ -1,6 +1,6 @@
 declare namespace AppRoute {
 
-  type MenuType = 'dir' | 'page'
+  type MenuType = 'dir' | 'page' | 'permission'
   /** 单个路由所携带的meta标识 */
   interface RouteMeta {
     /* 页面标题，通常必选。 */

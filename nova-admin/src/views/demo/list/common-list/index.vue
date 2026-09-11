@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import type { DataTableColumns, FormInst } from 'naive-ui'
+import type { DataTableColumns } from 'naive-ui'
 import { Gender } from '@/constants'
 import { useBoolean } from '@/hooks'
 import { fetchUserPage } from '@/service'
@@ -17,7 +17,6 @@ const initialModel = {
 }
 const model = ref({ ...initialModel })
 
-const formRef = ref<FormInst | null>()
 function sendMail(id?: number) {
   window.$message.success(`删除用户id:${id}`)
 }
@@ -147,7 +146,7 @@ function handleAddTable() {
 <template>
   <NSpace vertical size="large">
     <n-card>
-      <n-form ref="formRef" :model="model" label-placement="left" inline :show-feedback="false">
+      <n-form :model="model" label-placement="left" inline :show-feedback="false">
         <n-flex>
           <n-form-item label="姓名" path="condition_1">
             <n-input v-model:value="model.condition_1" placeholder="请输入" />

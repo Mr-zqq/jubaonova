@@ -17,12 +17,12 @@ const {
   allRoutes,
 } = defineProps<Props>()
 
-const { t } = useI18n()
-
 const emit = defineEmits<{
   open: []
   close: []
 }>()
+
+const { t } = useI18n()
 
 const { bool: modalVisible, setTrue: showModal, setFalse: hiddenModal } = useBoolean(false)
 const { bool: submitLoading, setTrue: startLoading, setFalse: endLoading } = useBoolean(false)

@@ -69,11 +69,17 @@ const columns = computed<DataTableColumns<AppRoute.RowRoute>>(() => [
     width: '6em',
     render: (row) => {
       const menuType = row.menuType || 'page'
-      const menuTagType: Record<string, NaiveUI.ThemeColor> = {
+      const menuTagType: Record<AppRoute.MenuType, NaiveUI.ThemeColor> = {
         dir: 'primary',
         page: 'warning',
+        permission: 'default',
       }
-      const menuTypeText: Record<string, string> = { dir: t('menu.menuTypeDir'), page: t('menu.menuTypePage'), permission: t('menu.menuTypePermission') }; return <NTag type={menuTagType[menuType]}>{menuTypeText[menuType] || menuType}</NTag>
+      const menuTypeText: Record<string, string> = {
+        dir: t('menu.menuTypeDir'),
+        page: t('menu.menuTypePage'),
+        permission: t('menu.menuTypePermission'),
+      }
+      return <NTag type={menuTagType[menuType]}>{menuTypeText[menuType] || menuType}</NTag>
     },
   },
   {

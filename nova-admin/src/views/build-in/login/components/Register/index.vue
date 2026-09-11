@@ -49,7 +49,7 @@ function handleRegister() {}
           v-model:value="formValue.account"
           clearable
           :placeholder="$t('login.accountPlaceholder')"
-          :input-props="{autocomplete:'username'}"
+          :input-props="{ autocomplete: 'username' }"
         />
       </n-form-item>
       <n-form-item path="pwd">
@@ -59,7 +59,7 @@ function handleRegister() {}
           :placeholder="$t('login.passwordPlaceholder')"
           clearable
           show-password-on="click"
-          :input-props="{autocomplete:'new-password'}"
+          :input-props="{ autocomplete: 'new-password' }"
         >
           <template #password-invisible-icon>
             <icon-park-outline-preview-close-one />
@@ -76,7 +76,7 @@ function handleRegister() {}
           :placeholder="$t('login.checkPasswordPlaceholder')"
           clearable
           show-password-on="click"
-          :input-props="{autocomplete:'new-password'}"
+          :input-props="{ autocomplete: 'new-password' }"
         >
           <template #password-invisible-icon>
             <icon-park-outline-preview-close-one />

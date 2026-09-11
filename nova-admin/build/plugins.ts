@@ -1,5 +1,9 @@
 import UnoCSS from '@unocss/vite'
+// eslint-disable-next-line ts/ban-ts-comment
+// @ts-ignore：node moduleResolution 无法解析 .d.mts（仅类型检查受影响，vite 运行时正常）
 import vue from '@vitejs/plugin-vue'
+// eslint-disable-next-line ts/ban-ts-comment
+// @ts-ignore：同上
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import AutoImport from 'unplugin-auto-import/vite'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'

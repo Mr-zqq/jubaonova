@@ -26,6 +26,8 @@ const { layoutMode } = storeToRefs(useAppStore())
 const {
   layout,
   activeKey,
+// eslint-disable-next-line ts/ban-ts-comment -- 压制下面 ts-ignore 的误报
+// @ts-ignore：pro-naive-ui 类型实例化过深（库类型问题，运行无影响）
 } = useLayoutMenu({
   mode: layoutMode,
   accordion: true,

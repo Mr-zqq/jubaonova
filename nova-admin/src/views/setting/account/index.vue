@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import type { DataTableColumns, FormInst } from 'naive-ui'
+import type { DataTableColumns } from 'naive-ui'
 import CopyText from '@/components/custom/CopyText.vue'
 import { Gender } from '@/constants'
 import { useBoolean } from '@/hooks'
@@ -18,7 +18,6 @@ function handleResetSearch() {
   model.value = { ...initialModel }
 }
 
-const formRef = ref<FormInst | null>()
 const modalRef = ref()
 
 async function delteteUser(id: number) {
@@ -182,7 +181,7 @@ const treeData = ref([
 
     <NSpace vertical class="flex-1">
       <n-card>
-        <n-form ref="formRef" :model="model" label-placement="left" inline :show-feedback="false">
+        <n-form :model="model" label-placement="left" inline :show-feedback="false">
           <n-flex>
             <n-form-item label="姓名" path="condition_1">
               <n-input v-model:value="model.condition_1" placeholder="请输入" />

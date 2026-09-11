@@ -33,13 +33,13 @@ function mapUserToDto(data: Partial<Entity.User> & { password?: string }) {
     body.avatar = data.avatar
   // 前端角色 id 数组 → 后端 roleIds
   if (data.role !== undefined)
-    body.roleIds = data.role as number[]
+    body.roleIds = data.role as unknown as number[]
   return body
 }
 
 // 新建用户
 export function fetchCreateUser(data: Entity.User & { password?: string }) {
-  return request.Post('/user', {
+  return request.Post<Service.ResponseResult<any>>('/user', {
     ...mapUserToDto(data),
     password: data.password || '123456',
   })
@@ -47,72 +47,72 @@ export function fetchCreateUser(data: Entity.User & { password?: string }) {
 
 // 更新用户
 export function fetchUpdateUser(id: number, data: Partial<Entity.User>) {
-  return request.Patch(`/user/${id}`, mapUserToDto(data))
+  return request.Patch<Service.ResponseResult<any>>(`/user/${id}`, mapUserToDto(data))
 }
 
 // 删除用户
 export function fetchDeleteUser(id: number) {
-  return request.Delete(`/user/${id}`)
+  return request.Delete<Service.ResponseResult<any>>(`/user/${id}`)
 }
 
 // 角色分页
 export function fetchRolePage(params?: Record<string, any>) {
-  return request.Get('/role', { params })
+  return request.Get<Service.ResponseResult<any>>('/role', { params })
 }
 // 新建角色
 export function fetchCreateRole(data: any) {
-  return request.Post('/role', data)
+  return request.Post<Service.ResponseResult<any>>('/role', data)
 }
 // 更新角色
 export function fetchUpdateRole(id: number, data: any) {
-  return request.Patch(`/role/${id}`, data)
+  return request.Patch<Service.ResponseResult<any>>(`/role/${id}`, data)
 }
 // 删除角色
 export function fetchDeleteRole(id: number) {
-  return request.Delete(`/role/${id}`)
+  return request.Delete<Service.ResponseResult<any>>(`/role/${id}`)
 }
 // 角色详情（含菜单/部门关联）
 export function fetchRoleDetail(id: number) {
-  return request.Get(`/role/${id}`)
+  return request.Get<Service.ResponseResult<any>>(`/role/${id}`)
 }
 
 // 部门扁平列表
 export function fetchDeptList() {
-  return request.Get('/dept')
+  return request.Get<Service.ResponseResult<any>>('/dept')
 }
 // 部门下拉树
 export function fetchDeptOptions() {
-  return request.Get('/dept/options')
+  return request.Get<Service.ResponseResult<any>>('/dept/options')
 }
 // 新建部门
 export function fetchCreateDept(data: any) {
-  return request.Post('/dept', data)
+  return request.Post<Service.ResponseResult<any>>('/dept', data)
 }
 // 更新部门
 export function fetchUpdateDept(id: number, data: any) {
-  return request.Patch(`/dept/${id}`, data)
+  return request.Patch<Service.ResponseResult<any>>(`/dept/${id}`, data)
 }
 // 删除部门
 export function fetchDeleteDept(id: number) {
-  return request.Delete(`/dept/${id}`)
+  return request.Delete<Service.ResponseResult<any>>(`/dept/${id}`)
 }
 
 // 登录日志分页
 export function fetchLoginLogPage(params?: Record<string, any>) {
-  return request.Get('/login-log', { params })
+  return request.Get<Service.ResponseResult<any>>('/login-log', { params })
 }
 // 删除登录日志（逗号分隔 id）
 export function fetchDeleteLoginLog(ids: string) {
-  return request.Delete(`/login-log/${ids}`)
+  return request.Delete<Service.ResponseResult<any>>(`/login-log/${ids}`)
 }
 // 清空登录日志
 export function fetchCleanLoginLog() {
-  return request.Delete('/login-log/clean')
+  return request.Delete<Service.ResponseResult<any>>('/login-log/clean')
 }
 
 // 服务状态
 export function fetchServerStatus() {
-  return request.Get('/server-status')
+  return request.Get<Service.ResponseResult<any>>('/server-status')
 }
 // 获取所有角色列表
 export function fetchRoleList() {

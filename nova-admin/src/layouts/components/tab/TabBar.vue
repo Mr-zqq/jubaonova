@@ -18,7 +18,7 @@ const tabStore = useTabStore()
 const { tabs } = storeToRefs(useTabStore())
 const appStore = useAppStore()
 
-const { scrollbar, onWheel } = useTabScroll(computed(() => tabStore.currentTabPath))
+const { onWheel } = useTabScroll(computed(() => tabStore.currentTabPath))
 
 const router = useRouter()
 function handleTab(route: RouteLocationNormalized) {

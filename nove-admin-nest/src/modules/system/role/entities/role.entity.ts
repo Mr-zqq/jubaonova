@@ -11,6 +11,7 @@ import { Menu } from '@/modules/system/menu/entities/menu.entity'
 import { User } from '@/modules/system/user/entities/user.entity'
 import { Dept } from '@/modules/system/dept/entities/dept.entity'
 import { DateFormat } from '@/common/decorators'
+import { DataScope } from '@/common/enums'
 
 @Entity('sys_role')
 export class Role {
@@ -43,7 +44,7 @@ export class Role {
     comment:
       '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）',
   })
-  dataScope: number
+  dataScope: DataScope
 
   @CreateDateColumn({
     comment: '创建时间',

@@ -172,6 +172,7 @@ const rules = {
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="2" label="菜单权限" path="menuIds">
           <n-tree
+            v-model:checked-keys="formModel.menuIds"
             block-line
             checkable
             :cascade="false"
@@ -179,7 +180,6 @@ const rules = {
             label-field="title"
             children-field="children"
             :data="menuTree"
-            v-model:checked-keys="formModel.menuIds"
           />
         </n-form-item-grid-item>
       </n-grid>

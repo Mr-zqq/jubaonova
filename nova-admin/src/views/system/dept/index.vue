@@ -3,7 +3,7 @@ import type { DataTableColumns } from 'naive-ui'
 import { useBoolean } from '@/hooks'
 import { fetchDeleteDept, fetchDeptList, fetchUpdateDept } from '@/service'
 import { arrayToTree } from '@/utils'
-import { NButton, NPopconfirm, NSpace, NSwitch, NTag } from 'naive-ui'
+import { NButton, NPopconfirm, NSpace, NSwitch } from 'naive-ui'
 import TableModal from './components/TableModal.vue'
 
 /* 前端约定：status 1=启用 0=禁用（后端 0=正常/1=停用，加载时已翻转） */

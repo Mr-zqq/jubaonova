@@ -50,7 +50,7 @@ export class DataScopeService {
 
     for (const role of session.roles) {
       if (role.status !== 0) continue
-      switch (role.dataScope as DataScope) {
+      switch (role.dataScope) {
         // 1. 全部数据权限：直接放开
         case DataScope.DATA_SCOPE_ALL:
           hasAllScope = true
@@ -125,7 +125,7 @@ export class DataScopeService {
 
     for (const role of session.roles) {
       if (role.status !== 0) continue
-      switch (role.dataScope as DataScope) {
+      switch (role.dataScope) {
         // 1. 全部数据权限
         case DataScope.DATA_SCOPE_ALL:
           hasAllScope = true
