@@ -3,7 +3,7 @@ import type { DataTableColumns, FormInst } from 'naive-ui'
 import CopyText from '@/components/custom/CopyText.vue'
 import { Gender } from '@/constants'
 import { useBoolean } from '@/hooks'
-import { fetchUserPage } from '@/service'
+import { fetchDeleteUser, fetchUpdateUser, fetchUserPage } from '@/service'
 import { NButton, NPopconfirm, NSpace, NSwitch, NTag } from 'naive-ui'
 import TableModal from './components/TableModal.vue'
 
@@ -21,8 +21,12 @@ function handleResetSearch() {
 const formRef = ref<FormInst | null>()
 const modalRef = ref()
 
-function delteteUser(id: number) {
-  window.$message.success(`删除用户id:${id}`)
+async function delteteUser(id: number) {
+  const { isSuccess } = await fetchDeleteUser(id)
+  if (isSuccess) {
+    window.$message.success('删除成功')
+    getUserList()
+  }
 }
 
 const columns: DataTableColumns<Entity.User> = [
@@ -109,10 +113,16 @@ const columns: DataTableColumns<Entity.User> = [
 
 const count = ref(0)
 const listData = ref<Entity.User[]>([])
-function handleUpdateDisabled(value: 0 | 1, id: number) {
-  const index = listData.value.findIndex(item => item.id === id)
-  if (index > -1)
-    listData.value[index].status = value
+async function handleUpdateDisabled(value: 0 | 1, id: number) {
+  const { isSuccess } = await fetchUpdateUser(id, { status: value })
+  if (isSuccess) {
+    const index = listData.value.findIndex(item => item.id === id)
+    if (index > -1)
+      listData.value[index].status = value
+  }
+  else {
+    getUserList()
+  }
 }
 
 async function getUserList() {
@@ -212,7 +222,7 @@ const treeData = ref([
           <Pagination :count="count" @change="changePage" />
         </NSpace>
 
-        <TableModal ref="modalRef" modal-name="用户" />
+        <TableModal ref="modalRef" modal-name="用户" @success="getUserList" />
       </n-card>
     </NSpace>
   </n-flex>

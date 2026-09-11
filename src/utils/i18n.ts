@@ -1,6 +1,6 @@
 import type { NDateLocale, NLocale } from 'naive-ui'
 import { i18n } from '@/modules/i18n'
-import { dateZhCN, zhCN } from 'naive-ui'
+import { dateDeDE, dateMsMY, dateThTH, dateZhCN, deDE, msMY, thTH, zhCN } from 'naive-ui'
 
 export function setLocale(locale: App.lang) {
   i18n.global.locale.value = locale
@@ -16,5 +16,17 @@ export const naiveI18nOptions: Record<App.lang, { locale: NLocale | null, dateLo
   enUS: {
     locale: null,
     dateLocale: null,
+  },
+  thTH: {
+    locale: thTH,
+    dateLocale: dateThTH,
+  },
+  msMY: {
+    locale: msMY,
+    dateLocale: dateMsMY,
+  },
+  deDE: {
+    locale: deDE,
+    dateLocale: dateDeDE,
   },
 }

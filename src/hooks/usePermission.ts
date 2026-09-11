@@ -15,6 +15,10 @@ export function usePermission() {
       return false
     const { role } = authStore.userInfo
 
+    // 登录接口未返回角色信息时视为无受限路由权限，避免 includes 报错阻断登录跳转
+    if (!role)
+      return false
+
     // 角色为super可直接通过
     let has = role.includes('super')
     if (!has) {

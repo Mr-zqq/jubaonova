@@ -11,6 +11,18 @@ const options = [
     label: '中文',
     value: 'zhCN',
   },
+  {
+    label: 'ภาษาไทย',
+    value: 'thTH',
+  },
+  {
+    label: 'Bahasa Melayu',
+    value: 'msMY',
+  },
+  {
+    label: 'Deutsch',
+    value: 'deDE',
+  },
 ]
 </script>
 

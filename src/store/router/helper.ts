@@ -18,20 +18,49 @@ function standardizedRoutes(route: AppRoute.RowRoute[]) {
   }) as AppRoute.Route[]
 }
 
+/* 后端菜单 path → 本地视图别名（后端 component 与本地视图路径不一致时使用） */
+const componentAlias: Record<string, string> = {
+  '/system/user': '/setting/account/index.vue',
+  '/system/menu': '/setting/menu/index.vue',
+  '/system/dict': '/setting/dictionary/index.vue',
+}
+
+/* 本地无对应视图的菜单统一渲染占位页，避免路由 component 为空导致白屏 */
+const FALLBACK_VIEW = '/build-in/route-placeholder/index.vue'
+
+function resolveViewComponent(modules: Record<string, any>, row: AppRoute.Route) {
+  if (row.componentPath && modules[`/src/views${row.componentPath}`])
+    return modules[`/src/views${row.componentPath}`]
+  const alias = componentAlias[row.path]
+  if (alias && modules[`/src/views${alias}`])
+    return modules[`/src/views${alias}`]
+  return modules[`/src/views${FALLBACK_VIEW}`]
+}
+
 export function createRoutes(routes: AppRoute.RowRoute[]) {
   const { hasPermission } = usePermission()
 
   // Structure the meta field
   let resultRouter = standardizedRoutes(routes)
 
-  // Route permission filtering
-  resultRouter = resultRouter.filter(i => hasPermission(i.meta.roles))
+  // Route permission filtering + 剔除按钮权限行（无 path，不能注册为路由）
+  resultRouter = resultRouter
+    .filter(i => hasPermission(i.meta.roles))
+    .filter(i => i.meta.menuType !== 'permission' && !!i.path)
 
   // Generate routes, no need to import files for those with redirect
-  const modules = import.meta.glob('@/views/**/*.vue')
+  const modules: Record<string, any> = import.meta.glob('@/views/**/*.vue')
   resultRouter = resultRouter.map((item: AppRoute.Route) => {
-    if (item.componentPath && !item.redirect)
-      item.component = modules[`/src/views${item.componentPath}`]
+    // 重定向行：保持无 component（嵌套/跳转记录）
+    if (item.redirect)
+      return item
+    const menuType = (item.meta as any)?.menuType
+    // 目录行：setRedirect 稍后会补 redirect，保持无 component 才能让子路由嵌套渲染；
+    // 若给了占位组件，子页面会被吞掉只显示占位页
+    if (menuType === 'dir' || menuType === 'directory')
+      return item
+    // 页面行：直连本地视图 → 别名映射 → 占位页兜底
+    item.component = resolveViewComponent(modules, item)
     return item
   })
 

@@ -17,6 +17,8 @@ const {
   allRoutes,
 } = defineProps<Props>()
 
+const { t } = useI18n()
+
 const emit = defineEmits<{
   open: []
   close: []
@@ -44,9 +46,9 @@ type ModalType = 'add' | 'view' | 'edit'
 const modalType = shallowRef<ModalType>('add')
 const modalTitle = computed(() => {
   const titleMap: Record<ModalType, string> = {
-    add: '添加',
-    view: '查看',
-    edit: '编辑',
+    add: t('menu.modalAdd'),
+    view: t('menu.modalView'),
+    edit: t('menu.modalEdit'),
   }
   return `${titleMap[modalType.value]}${modalName}`
 })
@@ -130,16 +132,16 @@ function filterDirectory(node: any[]) {
   })
 }
 
-const rules = {
+const rules = computed(() => ({
   name: {
     required: true,
-    // message: '请输入菜单名称',
+
     validator(rule: FormItemRule, value: string) {
       if (!value)
-        return new Error('请输入菜单名称')
+        return new Error(t('menu.nameRequired'))
 
       if (!new RegExp(Regex.RouteName).test(value))
-        return new Error('菜单只能包含英文数字_!@#$%^&*~-')
+        return new Error(t('menu.namePattern'))
 
       return true
     },
@@ -147,20 +149,20 @@ const rules = {
   },
   path: {
     required: true,
-    message: '请输入菜单路径',
+    message: t('menu.pathRequired'),
     trigger: 'blur',
   },
   componentPath: {
     required: true,
-    message: '请输入组件路径',
+    message: t('menu.componentPathRequired'),
     trigger: 'blur',
   },
   title: {
     required: true,
-    message: '请输入菜单标题',
+    message: t('menu.titleRequired'),
     trigger: 'blur',
   },
-}
+}))
 
 const options = ref()
 async function getRoleList() {
@@ -186,74 +188,74 @@ async function getRoleList() {
       <n-grid :cols="2" :x-gap="18">
         <n-form-item-grid-item :span="2" path="pid">
           <template #label>
-            父级目录
-            <HelpInfo message="不填写则为顶层菜单" />
+            {{ $t('menu.parentDir') }}
+            <HelpInfo :message="$t('menu.parentDirTip')" />
           </template>
           <n-tree-select
             v-model:value="formModel.pid" filterable clearable :options="dirTreeOptions" key-field="id"
-            label-field="title" children-field="children" placeholder="请选择父级目录"
+            label-field="title" children-field="children" :placeholder="$t('menu.parentDirPlaceholder')"
           />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="菜单名称" path="name">
+        <n-form-item-grid-item :span="1" :label="$t('menu.menuName')" path="name">
           <n-input v-model:value="formModel.name" placeholder="Eg: system" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="标题" path="title">
+        <n-form-item-grid-item :span="1" :label="$t('menu.menuTitle')" path="title">
           <n-input v-model:value="formModel.title" placeholder="Eg: My-System" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="2" label="路由路径" path="path">
+        <n-form-item-grid-item :span="2" :label="$t('menu.routePath')" path="path">
           <n-input v-model:value="formModel.path" placeholder="Eg: /system/user" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="菜单类型" path="menuType">
+        <n-form-item-grid-item :span="1" :label="$t('menu.menuType')" path="menuType">
           <n-radio-group v-model:value="formModel.menuType" name="radiogroup">
             <n-space>
               <n-radio value="dir">
-                目录
+                {{ $t('menu.menuTypeDir') }}
               </n-radio>
               <n-radio value="page">
-                页面
+                {{ $t('menu.menuTypePage') }}
               </n-radio>
             </n-space>
           </n-radio-group>
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="图标" path="icon">
+        <n-form-item-grid-item :span="1" :label="$t('menu.icon')" path="icon">
           <icon-select v-model:value="formModel.icon" :disabled="modalType === 'view'" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item v-if="formModel.menuType === 'page'" :span="2" label="组件路径" path="componentPath">
+        <n-form-item-grid-item v-if="formModel.menuType === 'page'" :span="2" :label="$t('menu.componentPath')" path="componentPath">
           <n-input v-model:value="formModel.componentPath" placeholder="Eg: /system/user/index.vue" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" path="order">
           <template #label>
-            菜单排序
-            <HelpInfo message="数字越小，同级中越靠前" />
+            {{ $t('menu.orderLabel') }}
+            <HelpInfo :message="$t('menu.orderTip')" />
           </template>
           <n-input-number v-model:value="formModel.order" />
         </n-form-item-grid-item>
         <n-form-item-grid-item v-if="formModel.menuType === 'page'" :span="1" path="href">
           <template #label>
-            外链页面
-            <HelpInfo message="填写后，点击菜单将跳转到该地址，组件路径任意填写" />
+            {{ $t('menu.href') }}
+            <HelpInfo :message="$t('menu.hrefTip')" />
           </template>
           <n-input v-model:value="formModel.href" placeholder="Eg: https://example.com" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="登录访问" path="requiresAuth">
+        <n-form-item-grid-item :span="1" :label="$t('menu.requiresAuth')" path="requiresAuth">
           <n-switch v-model:value="formModel.requiresAuth" />
         </n-form-item-grid-item>
         <n-form-item-grid-item
-          v-if="formModel.menuType === 'page'" :span="1" label="页面缓存"
+          v-if="formModel.menuType === 'page'" :span="1" :label="$t('menu.keepAlive')"
           path="keepAlive"
         >
           <n-switch v-model:value="formModel.keepAlive" />
         </n-form-item-grid-item>
         <n-form-item-grid-item
-          v-if="formModel.menuType === 'page'" :span="1" label="标签栏可见"
+          v-if="formModel.menuType === 'page'" :span="1" :label="$t('menu.withoutTab')"
           path="withoutTab"
         >
           <n-switch v-model:value="formModel.withoutTab" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item v-if="formModel.menuType === 'page'" :span="1" label="常驻标签栏" path="pinTab">
+        <n-form-item-grid-item v-if="formModel.menuType === 'page'" :span="1" :label="$t('menu.pinTab')" path="pinTab">
           <n-switch v-model:value="formModel.pinTab" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="侧边菜单隐藏" path="hide">
+        <n-form-item-grid-item :span="1" :label="$t('menu.hide')" path="hide">
           <n-switch v-model:value="formModel.hide" />
         </n-form-item-grid-item>
         <n-form-item-grid-item
@@ -261,20 +263,20 @@ async function getRoleList() {
           path="activeMenu"
         >
           <template #label>
-            高亮菜单
-            <HelpInfo message="当前路由不在左侧菜单显示，但需要高亮某个菜单" />
+            {{ $t('menu.activeMenu') }}
+            <HelpInfo :message="$t('menu.activeMenuTip')" />
           </template>
           <n-input v-model:value="formModel.activeMenu" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="2" path="roles">
           <template #label>
-            访问角色
-            <HelpInfo message="不填写则表示所有角色都可以访问" />
+            {{ $t('menu.roles') }}
+            <HelpInfo :message="$t('menu.rolesTip')" />
           </template>
           <n-select
             v-model:value="formModel.roles" multiple filterable
-            label-field="role"
-            value-field="id"
+            label-field="label"
+            value-field="value"
             :options="options"
           />
         </n-form-item-grid-item>
@@ -283,10 +285,10 @@ async function getRoleList() {
     <template v-if="modalType !== 'view'" #action>
       <n-space justify="center">
         <n-button @click="closeModal">
-          取消
+          {{ $t('menu.cancel') }}
         </n-button>
         <n-button type="primary" :loading="submitLoading" @click="submitModal">
-          提交
+          {{ $t('menu.submit') }}
         </n-button>
       </n-space>
     </template>

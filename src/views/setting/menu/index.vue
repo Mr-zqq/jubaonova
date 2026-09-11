@@ -9,24 +9,23 @@ import TableModal from './components/TableModal.vue'
 
 const { bool: loading, setTrue: startLoading, setFalse: endLoading } = useBoolean(false)
 
+const { t } = useI18n()
 function deleteData(id: number) {
-  window.$message.success(`删除菜单id:${id}`)
+  window.$message.success(t('menu.deleteToast', { id }))
 }
-
-const tableModalRef = ref()
-
-const columns: DataTableColumns<AppRoute.RowRoute> = [
+const tableModalRef: any = ref<InstanceType<typeof TableModal>>()
+const columns = computed<DataTableColumns<AppRoute.RowRoute>>(() => [
   {
     type: 'selection',
     width: 30,
   },
   {
-    title: '名称',
+    title: t('menu.name'),
     key: 'name',
     width: 200,
   },
   {
-    title: '图标',
+    title: t('menu.icon'),
     align: 'center',
     key: 'icon',
     width: '6em',
@@ -35,7 +34,7 @@ const columns: DataTableColumns<AppRoute.RowRoute> = [
     },
   },
   {
-    title: '标题',
+    title: t('menu.title'),
     align: 'center',
     key: 'title',
     ellipsis: {
@@ -43,12 +42,12 @@ const columns: DataTableColumns<AppRoute.RowRoute> = [
     },
   },
   {
-    title: '路径',
+    title: t('menu.path'),
     key: 'path',
     render: row => renderProCopyableText(row.path),
   },
   {
-    title: '组件路径',
+    title: t('menu.componentPath'),
     key: 'componentPath',
     ellipsis: {
       tooltip: true,
@@ -58,27 +57,27 @@ const columns: DataTableColumns<AppRoute.RowRoute> = [
     },
   },
   {
-    title: '排序值',
+    title: t('menu.order'),
     key: 'order',
     align: 'center',
     width: '6em',
   },
   {
-    title: '菜单类型',
+    title: t('menu.menuType'),
     align: 'center',
     key: 'menuType',
     width: '6em',
     render: (row) => {
       const menuType = row.menuType || 'page'
-      const menuTagType: Record<AppRoute.MenuType, NaiveUI.ThemeColor> = {
+      const menuTagType: Record<string, NaiveUI.ThemeColor> = {
         dir: 'primary',
         page: 'warning',
       }
-      return <NTag type={menuTagType[menuType]}>{menuType}</NTag>
+      const menuTypeText: Record<string, string> = { dir: t('menu.menuTypeDir'), page: t('menu.menuTypePage'), permission: t('menu.menuTypePermission') }; return <NTag type={menuTagType[menuType]}>{menuTypeText[menuType] || menuType}</NTag>
     },
   },
   {
-    title: '操作',
+    title: t('menu.actions'),
     align: 'center',
     key: 'actions',
     width: '15em',
@@ -89,25 +88,25 @@ const columns: DataTableColumns<AppRoute.RowRoute> = [
             size="small"
             onClick={() => tableModalRef.value.openModal('view', row)}
           >
-            查看
+            {t('menu.view')}
           </NButton>
           <NButton
             size="small"
             onClick={() => tableModalRef.value.openModal('edit', row)}
           >
-            编辑
+            {t('menu.edit')}
           </NButton>
           <NPopconfirm onPositiveClick={() => deleteData(row.id)}>
             {{
-              default: () => '确认删除',
-              trigger: () => <NButton size="small" type="error">删除</NButton>,
+              default: () => t('menu.confirmDelete'),
+              trigger: () => <NButton size="small" type="error">{t('menu.delete')}</NButton>,
             }}
           </NPopconfirm>
         </NSpace>
       )
     },
   },
-]
+])
 
 const tableData = ref<AppRoute.RowRoute[]>([])
 
@@ -123,7 +122,7 @@ async function getAllRoutes() {
 
 const checkedRowKeys = ref<number[]>([])
 async function handlePositiveClick() {
-  window.$message.success(`批量删除id:${checkedRowKeys.value.join(',')}`)
+  window.$message.success(t('menu.batchDeleteToast', { ids: checkedRowKeys.value.join(',') }))
 }
 </script>
 
@@ -134,7 +133,7 @@ async function handlePositiveClick() {
         <template #icon>
           <icon-park-outline-add-one />
         </template>
-        新建
+        {{ $t('menu.add') }}
       </NButton>
     </template>
 
@@ -144,7 +143,7 @@ async function handlePositiveClick() {
           <template #icon>
             <icon-park-outline-refresh />
           </template>
-          刷新
+          {{ $t('menu.refresh') }}
         </NButton>
         <NPopconfirm
           @positive-click="handlePositiveClick"
@@ -154,10 +153,10 @@ async function handlePositiveClick() {
               <template #icon>
                 <icon-park-outline-delete-five />
               </template>
-              批量删除
+              {{ $t('menu.batchDelete') }}
             </NButton>
           </template>
-          确认删除所有选中菜单？
+          {{ $t('menu.confirmBatchDelete') }}
         </NPopconfirm>
       </n-flex>
     </template>
@@ -168,6 +167,6 @@ async function handlePositiveClick() {
       size="small"
       :scroll-x="1200"
     />
-    <TableModal ref="tableModalRef" :all-routes="tableData" modal-name="菜单" />
+    <TableModal ref="tableModalRef" :all-routes="tableData" :modal-name="$t('menu.modalName')" />
   </n-card>
 </template>
