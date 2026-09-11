@@ -33,6 +33,32 @@ export class DictController {
     private readonly dictDataService: DictDataService,
   ) {}
 
+  // ==================== 前端兼容接口 ====================
+
+  @Get('list')
+  @ApiOperation({ summary: '字典列表（前端兼容）' })
+  @ApiBearerAuth()
+  async findCompatList(@Query('code') code?: string) {
+    // 有 code 时返回该类型下的字典数据（label/value 结构，供下拉与字典 store 使用）
+    if (code && code !== 'undefined') {
+      const rows = await this.dictDataService.findByType(code)
+      return rows.map(item => ({
+        id: item.id,
+        label: item.name,
+        value: item.value,
+        code: item.dictType,
+        sort: item.sort,
+      }))
+    }
+    // 无 code 时返回字典类型（label/code 结构，供字典管理页使用）
+    const { list } = await this.dictTypeService.findAll({})
+    return list.map(item => ({
+      id: item.id,
+      label: item.name,
+      code: item.type,
+    }))
+  }
+
   // ==================== 字典类型管理 ====================
 
   @Post('types')

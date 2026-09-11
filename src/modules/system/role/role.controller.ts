@@ -111,6 +111,12 @@ export class RoleController {
     return this.roleService.findOptions()
   }
 
+  @Get('list')
+  @ApiOperation({ summary: '角色列表（前端兼容：下拉选项）' })
+  findCompatList() {
+    return this.roleService.findOptions()
+  }
+
   @Get(':id')
   @ApiOperation({ summary: '查询角色详情' })
   @ApiParam({ name: 'id', description: '角色ID', example: 1 })

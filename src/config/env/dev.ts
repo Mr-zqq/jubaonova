@@ -3,7 +3,7 @@ import { AppConfig } from '..'
 
 const developmentConfig: AppConfig = {
   server: {
-    port: 3000,
+    port: 3001,
     requestTimeoutMs: 30000,
   },
   database: {
@@ -30,7 +30,7 @@ const developmentConfig: AppConfig = {
     enableRefreshToken: false,
   },
   captcha: {
-    enabled: true,
+    enabled: false,
     expiresIn: 300, // 5分钟
     size: 4,
     type: 'math',

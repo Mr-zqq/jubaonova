@@ -7,6 +7,7 @@ import { MenuService } from './menu.service'
 @Module({
   controllers: [MenuController],
   providers: [MenuService],
+  exports: [MenuService],
   imports: [TypeOrmModule.forFeature([Menu])],
 })
 export class MenuModule {}

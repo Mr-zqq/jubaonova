@@ -25,7 +25,7 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger'
-import { RequirePermissions, Public } from '@/common/decorators'
+import { RequirePermissions } from '@/common/decorators'
 import { ApiException } from '@/common/filters'
 import { ApiErrorCode } from '@/common/enums'
 
@@ -38,7 +38,6 @@ export class UserController {
     private readonly jwtService: JwtService,
   ) {}
 
-  @Public()
   @ApiOperation({ summary: '创建用户' })
   @ApiBody({
     type: CreateUserDto,

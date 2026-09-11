@@ -25,7 +25,9 @@ export class AuthService {
   ) {}
 
   async login(loginAuthDto: LoginAuthDto, clientInfo: ClientInfo) {
-    const { username, password, captchaId, captcha } = loginAuthDto
+    const { password, captchaId, captcha } = loginAuthDto
+    // 兼容前端 userName（大写 N）字段
+    const username = loginAuthDto.username || (loginAuthDto as any).userName
 
     // 验证验证码（如果启用）
     if (captchaId && captcha) {
@@ -164,7 +166,9 @@ export class AuthService {
     const expiresInSeconds = convertExpiresInToSeconds(config.jwt.expiresIn)
     await this.redisService.set(sessionKey, session, expiresInSeconds)
 
-    return token
+    // 返回角色标识数组，供前端路由权限判定（对应 Api.Login.Info.role）
+    const role = roles.map(item => item.roleKey)
+    return { ...token, role }
   }
 
   /**

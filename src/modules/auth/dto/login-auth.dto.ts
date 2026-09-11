@@ -10,7 +10,14 @@ export class LoginAuthDto {
   @IsNotEmpty({
     message: '用户名不能为空',
   })
-  username: string
+  username?: string
+
+  @ApiProperty({
+    description: '前端兼容字段 userName',
+    required: false,
+  })
+  @IsOptional()
+  userName?: string
 
   @ApiProperty({
     description: '密码',

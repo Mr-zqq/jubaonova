@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core'
 import { JwtModule } from '@nestjs/jwt'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UserModule } from '@/modules/system/user/user.module'
+import { MenuModule } from '@/modules/system/menu/menu.module'
 import { LoginLogModule } from '@/modules/monitor/login-log/login-log.module'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
@@ -17,6 +18,7 @@ import { Dept } from '@/modules/system/dept/entities/dept.entity'
   providers: [AuthService, CaptchaService, Reflector, DataScopeService],
   imports: [
     UserModule,
+    MenuModule,
     LoginLogModule,
     TypeOrmModule.forFeature([Dept]),
     JwtModule.register({

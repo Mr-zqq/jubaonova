@@ -90,6 +90,45 @@ export class MenuService {
     })
   }
 
+  // 获取全部路由（供前端路由表/菜单管理页使用，返回扁平结构）
+  async findAllRoutes() {
+    const menus = await this.menuRepository.find({
+      order: {
+        sort: 'ASC',
+        id: 'ASC',
+      },
+    })
+
+    return menus.map(menu => {
+      const nameFromPath = (menu.path || '')
+        .replace(/^\//, '')
+        .replace(/\//g, '-')
+      const nameFromPerms = (menu.perms || '').replace(/:/g, '-')
+      return {
+        id: menu.id,
+        pid: menu.parentId,
+        name: nameFromPath || nameFromPerms || 'menu-' + menu.id,
+        path: menu.path || '',
+        title: menu.title,
+        icon: menu.icon || undefined,
+        componentPath: menu.component || null,
+        menuType:
+          menu.menuType === 'directory'
+            ? 'dir'
+            : menu.menuType === 'page'
+              ? 'page'
+              : menu.menuType,
+        order: menu.sort,
+        requiresAuth: true,
+        keepAlive: menu.keepAlive,
+        hide: !menu.menuVisible,
+        pinTab: menu.pinTab,
+        activeMenu: menu.activePath || undefined,
+        href: menu.isLink ? menu.linkPath : undefined,
+      }
+    })
+  }
+
   // 获取用户权限列表
   async getPermissionsByRoles(roleIds: number[]): Promise<string[]> {
     if (!roleIds || roleIds.length === 0) {

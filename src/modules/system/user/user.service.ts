@@ -35,8 +35,18 @@ export class UserService {
       throw new ApiException('用户已存在', ApiErrorCode.SERVER_ERROR)
 
     try {
-      // 创建用户基本信息
-      const newUser = this.userRepository.create(createUserDto)
+      // 创建用户基本信息（注意：密码由 User 实体的 @BeforeInsert 钩子自动加密，这里传入明文即可，不要重复加密）
+      const { roleIds, ...userData } = createUserDto
+      const newUser = this.userRepository.create(userData)
+      // 关联角色
+      if (roleIds && roleIds.length > 0) {
+        const roles = await this.roleRepository.find({
+          where: {
+            id: In(roleIds),
+          },
+        })
+        newUser.roles = roles
+      }
       await this.userRepository.save(newUser)
 
       return '注册成功'
